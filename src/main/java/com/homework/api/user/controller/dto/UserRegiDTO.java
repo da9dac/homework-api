@@ -4,6 +4,16 @@ import java.time.LocalDateTime;
 
 import com.homework.api.user.model.TestDa9dac;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class UserRegiDTO {
 
 	private String userId;
@@ -12,27 +22,14 @@ public class UserRegiDTO {
 	private String regiUser;
 	private String useYn;
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public void setUserNm(String userNm) {
-		this.userNm = userNm;
-	}
-
-	public void setPw(String pw) {
-		this.pw = pw;
-	}
-
-	public void setRegiUser(String regiUser) {
-		this.regiUser = regiUser;
-	}
-
-	public void setUseYn(String useYn) {
-		this.useYn = useYn;
-	}
-
 	public TestDa9dac DTOToEntity() {
-		return new TestDa9dac(userId, userNm, pw, regiUser, useYn);
+		return TestDa9dac.builder()
+			.userId(userId)
+			.userNm(userNm)
+			.pw(pw)
+			.regiUser(regiUser)
+			.useYn(useYn)
+			.build();
 	}
 }
+
