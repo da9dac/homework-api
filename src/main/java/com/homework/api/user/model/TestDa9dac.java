@@ -1,5 +1,6 @@
 package com.homework.api.user.model;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import jakarta.persistence.Column;
@@ -22,13 +23,13 @@ public class TestDa9dac {
 	private String pw;
 
 	@Column(name = "REGI_DT")
-	private LocalTime regiDt;
+	private LocalDateTime regiDt;
 
 	@Column(name = "REGI_USER", nullable = false)
 	private String regiUser;
 
 	@Column(name = "UPDA_DT")
-	private LocalTime updaDt;
+	private LocalDateTime updaDt;
 
 	@Column(name = "UPDA_USER")
 	private String updaUser;
@@ -48,7 +49,7 @@ public class TestDa9dac {
 		return pw;
 	}
 
-	public LocalTime getRegiDt() {
+	public LocalDateTime getRegiDt() {
 		return regiDt;
 	}
 
@@ -56,7 +57,7 @@ public class TestDa9dac {
 		return regiUser;
 	}
 
-	public LocalTime getUpdaDt() {
+	public LocalDateTime getUpdaDt() {
 		return updaDt;
 	}
 
