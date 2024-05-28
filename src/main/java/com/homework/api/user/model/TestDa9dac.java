@@ -37,6 +37,17 @@ public class TestDa9dac {
 	@Column(name = "USE_YN", nullable = false)
 	private String useYn;
 
+	public TestDa9dac() {}
+
+	public TestDa9dac(String userId, String userNm, String pw,
+		String regiUser, String useYn) {
+		this.userId = userId;
+		this.userNm = userNm;
+		this.pw = pw;
+		this.regiUser = regiUser;
+		this.useYn = useYn;
+	}
+
 	public String getUserId() {
 		return userId;
 	}

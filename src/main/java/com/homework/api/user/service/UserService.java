@@ -19,4 +19,8 @@ public class UserService {
 	public List<TestDa9dac> getUsers() {
 		return testDa9dacRepository.findAll();
 	}
+
+	public void addUser(TestDa9dac testDa9dac) {
+		testDa9dacRepository.save(testDa9dac);
+	}
 }
