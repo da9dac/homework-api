@@ -3,6 +3,7 @@ package com.homework.api.user.model;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -51,6 +52,7 @@ public class TestDa9dac {
 	@Column(name = "UPDA_USER")
 	private String updaUser;
 
+	@ColumnDefault("Y")
 	@Column(name = "USE_YN", nullable = false)
 	private String useYn;
 }
