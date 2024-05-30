@@ -4,15 +4,6 @@ import java.time.LocalDateTime;
 
 import com.homework.api.user.model.TestDa9dac;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-
-
-@Getter
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 public class UserRegiDTO {
 
 	private String userId;
@@ -21,14 +12,58 @@ public class UserRegiDTO {
 	private String regiUser;
 	private String useYn;
 
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getUserNm() {
+		return userNm;
+	}
+
+	public void setUserNm(String userNm) {
+		this.userNm = userNm;
+	}
+
+	public String getPw() {
+		return pw;
+	}
+
+	public void setPw(String pw) {
+		this.pw = pw;
+	}
+
+	public String getRegiUser() {
+		return regiUser;
+	}
+
+	public void setRegiUser(String regiUser) {
+		this.regiUser = regiUser;
+	}
+
+	public String getUseYn() {
+		return useYn;
+	}
+
+	public void setUseYn(String useYn) {
+		this.useYn = useYn;
+	}
+
+	public UserRegiDTO() {}
+
+	protected UserRegiDTO(String userId, String userNm, String pw, String regiUser, String useYn) {
+		this.userId = userId;
+		this.userNm = userNm;
+		this.pw = pw;
+		this.regiUser = regiUser;
+		this.useYn = useYn;
+	}
+
 	public TestDa9dac DTOToEntity() {
-		return TestDa9dac.builder()
-			.userId(userId)
-			.userNm(userNm)
-			.pw(pw)
-			.regiUser(regiUser)
-			.useYn(useYn)
-			.build();
+		return new TestDa9dac(userId, userNm, pw, regiUser, useYn);
 	}
 }
 

@@ -26,4 +26,14 @@ public class UserService {
 	public void addUser(TestDa9dac testDa9dac) {
 		testDa9dacRepository.save(testDa9dac);
 	}
+
+	@Transactional
+	public void updateUser() {
+
+	}
+
+	@Transactional
+	public void deleteUser() {
+
+	}
 }

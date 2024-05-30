@@ -32,4 +32,14 @@ public class UserController {
 	public void regiUser(@RequestBody UserRegiDTO request) {
 		userService.addUser(request.DTOToEntity());
 	}
+
+	@PostMapping("update")
+	public void updateUser(@RequestBody UserRegiDTO request) {
+		userService.updateUser();
+	}
+
+	@PostMapping("delete")
+	public void deleteUser(@RequestBody UserRegiDTO request) {
+		userService.deleteUser();
+	}
 }
