@@ -1,16 +1,13 @@
 package com.homework.api.user.controller.dto;
 
-import java.time.LocalDateTime;
-
 import com.homework.api.user.model.TestDa9dac;
 
-public class UserRegiDTO {
+public class RegiRequest {
 
 	private String userId;
 	private String userNm;
 	private String pw;
 	private String regiUser;
-	private String useYn;
 
 	public String getUserId() {
 		return userId;
@@ -44,26 +41,17 @@ public class UserRegiDTO {
 		this.regiUser = regiUser;
 	}
 
-	public String getUseYn() {
-		return useYn;
-	}
+	public RegiRequest() {}
 
-	public void setUseYn(String useYn) {
-		this.useYn = useYn;
-	}
-
-	public UserRegiDTO() {}
-
-	protected UserRegiDTO(String userId, String userNm, String pw, String regiUser, String useYn) {
+	protected RegiRequest(String userId, String userNm, String pw, String regiUser) {
 		this.userId = userId;
 		this.userNm = userNm;
 		this.pw = pw;
 		this.regiUser = regiUser;
-		this.useYn = useYn;
 	}
 
 	public TestDa9dac DTOToEntity() {
-		return new TestDa9dac(userId, userNm, pw, regiUser, useYn);
+		return new TestDa9dac(userId, userNm, pw, regiUser);
 	}
 }
 

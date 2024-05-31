@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.homework.api.user.controller.dto.UserRegiDTO;
+import com.homework.api.user.controller.dto.DeleteRequest;
+import com.homework.api.user.controller.dto.RegiRequest;
+import com.homework.api.user.controller.dto.UpdateRequest;
 import com.homework.api.user.model.TestDa9dac;
 import com.homework.api.user.service.UserService;
 
@@ -29,17 +31,17 @@ public class UserController {
 	}
 
 	@PostMapping("/regiUser")
-	public void regiUser(@RequestBody UserRegiDTO request) {
+	public void regiUser(@RequestBody RegiRequest request) {
 		userService.addUser(request.DTOToEntity());
 	}
 
 	@PostMapping("update")
-	public void updateUser(@RequestBody UserRegiDTO request) {
-		userService.updateUser();
+	public void updateUser(@RequestBody UpdateRequest request) {
+		userService.updateUser(request);
 	}
 
 	@PostMapping("delete")
-	public void deleteUser(@RequestBody UserRegiDTO request) {
-		userService.deleteUser();
+	public void deleteUser(@RequestBody DeleteRequest request) {
+		userService.deleteUser(request);
 	}
 }

@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.homework.api.user.controller.dto.DeleteRequest;
+import com.homework.api.user.controller.dto.UpdateRequest;
 import com.homework.api.user.model.TestDa9dac;
 import com.homework.api.user.repository.TestDa9dacRepository;
 
@@ -28,12 +30,29 @@ public class UserService {
 	}
 
 	@Transactional
-	public void updateUser() {
+	public void updateUser(UpdateRequest request) {
+		TestDa9dac user = testDa9dacRepository.findById(request.getUserId()).orElseThrow(RuntimeException::new);
 
+		user.setUserNm(request.getUserNm());
+		user.setPw(request.getPw());
+		user.setUpdaUser(request.getUpdaUser());
+
+		testDa9dacRepository.save(user);
 	}
 
 	@Transactional
-	public void deleteUser() {
+	public void deleteUser(DeleteRequest request) {
+		TestDa9dac user = testDa9dacRepository.findById(request.getUserId()).orElseThrow(RuntimeException::new);
 
+		validateDelete(user);
+
+		user.setUseYn("N");
+		user.setUpdaUser(request.getUpdaUser());
+
+		testDa9dacRepository.save(user);
+	}
+
+	private void validateDelete(TestDa9dac user) {
+		if (user.getUseYn().equals("N")) throw new RuntimeException();
 	}
 }

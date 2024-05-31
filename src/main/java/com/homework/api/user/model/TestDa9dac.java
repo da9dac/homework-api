@@ -45,7 +45,7 @@ public class TestDa9dac {
 
 	@ColumnDefault("Y")
 	@Column(name = "USE_YN", nullable = false)
-	private String useYn;
+	private String useYn = "Y";
 
 	public TestDa9dac() {}
 
@@ -62,12 +62,11 @@ public class TestDa9dac {
 		this.useYn = useYn;
 	}
 
-	public TestDa9dac(String userNm, String userId, String pw, String regiUser, String useYn) {
+	public TestDa9dac(String userNm, String userId, String pw, String regiUser) {
 		this.userNm = userNm;
 		this.userId = userId;
 		this.pw = pw;
 		this.regiUser = regiUser;
-		this.useYn = useYn;
 	}
 
 	public String getUserId() {
