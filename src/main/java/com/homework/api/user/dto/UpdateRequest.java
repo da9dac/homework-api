@@ -1,4 +1,4 @@
-package com.homework.api.user.controller.dto;
+package com.homework.api.user.dto;
 
 public class UpdateRequest {
 
