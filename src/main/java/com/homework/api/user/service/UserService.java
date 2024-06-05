@@ -1,5 +1,9 @@
 package com.homework.api.user.service;
 
+import static com.homework.api.user.model.QTestDa9dac.*;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +17,7 @@ import com.homework.api.user.model.QTestDa9dac;
 import com.homework.api.user.model.TestDa9dac;
 import com.homework.api.user.repository.TestDa9dacRepository;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import jakarta.persistence.EntityManager;
@@ -59,11 +64,66 @@ public class UserService {
 	public List<TestDa9dac> search(Map<String, String> params) {
 		JPAQueryFactory jq = new JPAQueryFactory(em);
 
-		QTestDa9dac testDa9dac = new QTestDa9dac("testDa9dac");
-		List<TestDa9dac> list = jq.selectFrom(testDa9dac)
-			// .where(testDa9dac.userNm.like())
+		return jq.selectFrom(testDa9dac)
+			.where(
+				userNmLike(params),
+				userIdLike(params),
+				regiUserLike(params),
+				updaUserLike(params),
+				regiDtBetween(params),
+				updaDtBetween(params)
+			)
 			.fetch();
+	}
 
-		return list;
+	private BooleanExpression userNmLike(Map<String, String> params) {
+		if (!params.get("userNm").isEmpty()) {
+			return testDa9dac.userNm.like("%" + params.get("userNm") + "%");
+		}
+		return null;
+	}
+
+	private BooleanExpression userIdLike(Map<String, String> params) {
+		if (!params.get("userId").isEmpty()) {
+			return testDa9dac.userId.like("%" + params.get("userId") + "%");
+		}
+		return null;
+	}
+
+	private BooleanExpression regiUserLike(Map<String, String> params) {
+		if (!params.get("regiUser").isEmpty()) {
+			return testDa9dac.regiUser.like("%" + params.get("regiUser") + "%");
+		}
+
+		return null;
+	}
+
+	private BooleanExpression updaUserLike(Map<String, String> params) {
+		if (!params.get("updaUser").isEmpty()) {
+			return testDa9dac.updaUser.like("%" + params.get("updaUser") + "%");
+		}
+		return null;
+	}
+
+	private BooleanExpression regiDtBetween(Map<String, String> params) {
+		if (!params.get("regiDtFrom").isEmpty() && !params.get("regiDtTo").isEmpty()) {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			LocalDateTime from = LocalDateTime.parse(params.get("regiDtFrom"), formatter);
+			LocalDateTime to = LocalDateTime.parse(params.get("regiDtTo"), formatter);
+
+			return testDa9dac.regiDt.between(from, to);
+		}
+		return null;
+	}
+
+	private BooleanExpression updaDtBetween(Map<String, String> params) {
+		if (!params.get("updaDtFrom").isEmpty() && !params.get("updaDtTo").isEmpty()) {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			LocalDateTime from = LocalDateTime.parse(params.get("updaDtFrom"), formatter);
+			LocalDateTime to = LocalDateTime.parse(params.get("updaDtTo"), formatter);
+
+			return testDa9dac.updaDt.between(from, to);
+		}
+		return null;
 	}
 }
