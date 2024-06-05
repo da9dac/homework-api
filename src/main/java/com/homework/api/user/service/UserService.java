@@ -61,7 +61,7 @@ public class UserService {
 
 		QTestDa9dac testDa9dac = new QTestDa9dac("testDa9dac");
 		List<TestDa9dac> list = jq.selectFrom(testDa9dac)
-			.where(testDa9dac.userNm.like())
+			// .where(testDa9dac.userNm.like())
 			.fetch();
 
 		return list;
