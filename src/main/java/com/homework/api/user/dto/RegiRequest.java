@@ -1,4 +1,4 @@
-package com.homework.api.user.controller.dto;
+package com.homework.api.user.dto;
 
 import com.homework.api.user.model.TestDa9dac;
 

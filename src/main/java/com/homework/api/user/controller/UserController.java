@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.homework.api.user.controller.dto.DeleteRequest;
-import com.homework.api.user.controller.dto.RegiRequest;
-import com.homework.api.user.controller.dto.UpdateRequest;
+import com.homework.api.user.dto.DeleteRequest;
+import com.homework.api.user.dto.RegiRequest;
+import com.homework.api.user.dto.UpdateRequest;
 import com.homework.api.user.model.TestDa9dac;
 import com.homework.api.user.service.UserService;
 
