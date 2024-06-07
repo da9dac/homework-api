@@ -2,7 +2,6 @@ package com.homework.api.user.controller;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.homework.api.user.dto.DeleteRequest;
 import com.homework.api.user.dto.RegiRequest;
+import com.homework.api.user.dto.GroupByResponse;
+import com.homework.api.user.dto.DataSearchResult;
 import com.homework.api.user.dto.UpdateRequest;
 import com.homework.api.user.model.TestDa9dac;
 import com.homework.api.user.service.UserService;
@@ -49,9 +50,12 @@ public class UserController {
 	}
 
 	@PostMapping("/search")
-	public ResponseEntity<List<TestDa9dac>> search(@RequestBody Map<String, String> params) {
-		ResponseEntity<List<TestDa9dac>> response =
-			new ResponseEntity<>(userService.search(params), HttpStatus.OK);
+	public ResponseEntity<DataSearchResult> search(@RequestBody Map<String, String> params) {
+		List<TestDa9dac> search = userService.search(params);
+		List<GroupByResponse> groupBy = userService.groupBy(params);
+
+		ResponseEntity<DataSearchResult> response = new ResponseEntity<>(new DataSearchResult(search, groupBy), HttpStatus.OK);
+
 		return response;
 	}
 }

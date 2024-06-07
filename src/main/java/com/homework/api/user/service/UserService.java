@@ -2,7 +2,9 @@ package com.homework.api.user.service;
 
 import static com.homework.api.user.model.QTestDa9dac.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -12,12 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.homework.api.user.dto.DeleteRequest;
+import com.homework.api.user.dto.GroupByResponse;
 import com.homework.api.user.dto.UpdateRequest;
-import com.homework.api.user.model.QTestDa9dac;
 import com.homework.api.user.model.TestDa9dac;
 import com.homework.api.user.repository.TestDa9dacRepository;
-import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.StringTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import jakarta.persistence.EntityManager;
@@ -64,7 +68,8 @@ public class UserService {
 	public List<TestDa9dac> search(Map<String, String> params) {
 		JPAQueryFactory jq = new JPAQueryFactory(em);
 
-		return jq.selectFrom(testDa9dac)
+		return jq
+			.selectFrom(testDa9dac)
 			.where(
 				userNmLike(params),
 				userIdLike(params),
@@ -74,6 +79,27 @@ public class UserService {
 				updaDtBetween(params),
 				useYnEqToY()
 			)
+			.fetch();
+	}
+
+	public List<GroupByResponse> groupBy(Map<String, String> params) {
+		JPAQueryFactory jq = new JPAQueryFactory(em);
+
+		return jq
+			.select(Projections.constructor(GroupByResponse.class,
+				convertRegiDt(),
+				testDa9dac.count().as("userCount")))
+			.from(testDa9dac)
+			.where(
+				userNmLike(params),
+				userIdLike(params),
+				regiUserLike(params),
+				updaUserLike(params),
+				regiDtBetween(params),
+				updaDtBetween(params),
+				useYnEqToY()
+			)
+			.groupBy(convertRegiDt())
 			.fetch();
 	}
 
@@ -109,8 +135,8 @@ public class UserService {
 	private BooleanExpression regiDtBetween(Map<String, String> params) {
 		if (!params.get("regiDtFrom").isEmpty() && !params.get("regiDtTo").isEmpty()) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			LocalDateTime from = LocalDateTime.parse(params.get("regiDtFrom"), formatter);
-			LocalDateTime to = LocalDateTime.parse(params.get("regiDtTo"), formatter);
+			LocalDateTime from = LocalDate.parse(params.get("regiDtFrom"), formatter).atStartOfDay();
+			LocalDateTime to = LocalDate.parse(params.get("regiDtTo"), formatter).atTime(LocalTime.MAX);
 
 			return testDa9dac.regiDt.between(from, to);
 		}
@@ -120,8 +146,8 @@ public class UserService {
 	private BooleanExpression updaDtBetween(Map<String, String> params) {
 		if (!params.get("updaDtFrom").isEmpty() && !params.get("updaDtTo").isEmpty()) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			LocalDateTime from = LocalDateTime.parse(params.get("updaDtFrom"), formatter);
-			LocalDateTime to = LocalDateTime.parse(params.get("updaDtTo"), formatter);
+			LocalDateTime from = LocalDate.parse(params.get("updaDtFrom"), formatter).atStartOfDay();
+			LocalDateTime to = LocalDate.parse(params.get("updaDtTo"), formatter).atTime(LocalTime.MAX);
 
 			return testDa9dac.updaDt.between(from, to);
 		}
@@ -130,5 +156,9 @@ public class UserService {
 
 	private BooleanExpression useYnEqToY() {
 		return testDa9dac.useYn.eq("Y");
+	}
+
+	private StringTemplate convertRegiDt() {
+		return Expressions.stringTemplate("CONVERT(char(10), {0}, 23)", testDa9dac.regiDt);
 	}
 }
