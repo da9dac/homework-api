@@ -71,7 +71,8 @@ public class UserService {
 				regiUserLike(params),
 				updaUserLike(params),
 				regiDtBetween(params),
-				updaDtBetween(params)
+				updaDtBetween(params),
+				useYnEqToY()
 			)
 			.fetch();
 	}
@@ -125,5 +126,9 @@ public class UserService {
 			return testDa9dac.updaDt.between(from, to);
 		}
 		return null;
+	}
+
+	private BooleanExpression useYnEqToY() {
+		return testDa9dac.useYn.eq("Y");
 	}
 }
