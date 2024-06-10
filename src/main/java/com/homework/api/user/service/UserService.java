@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.homework.api.user.dto.DeleteRequest;
 import com.homework.api.user.dto.GroupByResponse;
+import com.homework.api.user.dto.SearchRequest;
+import com.homework.api.user.dto.SearchResult;
 import com.homework.api.user.dto.UpdateRequest;
 import com.homework.api.user.model.TestDa9dac;
 import com.homework.api.user.repository.TestDa9dacRepository;
@@ -39,10 +41,6 @@ public class UserService {
 		this.em = em;
 	}
 
-	public List<TestDa9dac> getUsers() {
-		return testDa9dacRepository.findAll();
-	}
-
 	@Transactional
 	public void addUser(TestDa9dac testDa9dac) {
 		testDa9dacRepository.save(testDa9dac);
@@ -65,24 +63,29 @@ public class UserService {
 		testDa9dacRepository.updateUseYnAndUpdaUserByUserIdIn(request.getUserIds(), request.getUpdaUser());
 	}
 
-	public List<TestDa9dac> search(Map<String, String> params) {
+	public SearchResult getUsers(SearchRequest request) {
+		SearchResult result = new SearchResult(search(request), groupBy(request));
+		return result;
+	}
+
+	private List<TestDa9dac> search(SearchRequest params) {
 		JPAQueryFactory jq = new JPAQueryFactory(em);
 
 		return jq
 			.selectFrom(testDa9dac)
 			.where(
-				userNmLike(params),
-				userIdLike(params),
-				regiUserLike(params),
-				updaUserLike(params),
-				regiDtBetween(params),
-				updaDtBetween(params),
-				useYnEqToY()
+				userNmLike(params.getUserNm()),
+				userIdLike(params.getUserId()),
+				regiUserLike(params.getRegiUser()),
+				updaUserLike(params.getUpdaUser()),
+				regiDtBetween(params.getRegiDtFrom(), params.getRegiDtTo()),
+				updaDtBetween(params.getUpdaDtFrom(), params.getUpdaDtTo()),
+				useYnEqToY("")
 			)
 			.fetch();
 	}
 
-	public List<GroupByResponse> groupBy(Map<String, String> params) {
+	private List<GroupByResponse> groupBy(SearchRequest params) {
 		JPAQueryFactory jq = new JPAQueryFactory(em);
 
 		return jq
@@ -91,71 +94,72 @@ public class UserService {
 				testDa9dac.count().as("userCount")))
 			.from(testDa9dac)
 			.where(
-				userNmLike(params),
-				userIdLike(params),
-				regiUserLike(params),
-				updaUserLike(params),
-				regiDtBetween(params),
-				updaDtBetween(params),
-				useYnEqToY()
+				userNmLike(params.getUserNm()),
+				userIdLike(params.getUserId()),
+				regiUserLike(params.getRegiUser()),
+				updaUserLike(params.getUpdaUser()),
+				regiDtBetween(params.getRegiDtFrom(), params.getRegiDtTo()),
+				updaDtBetween(params.getUpdaDtFrom(), params.getUpdaDtTo()),
+				useYnEqToY("Y")
 			)
 			.groupBy(convertRegiDt())
 			.fetch();
 	}
 
-	private BooleanExpression userNmLike(Map<String, String> params) {
-		if (!params.get("userNm").isEmpty()) {
-			return testDa9dac.userNm.like("%" + params.get("userNm") + "%");
+	private BooleanExpression userNmLike(String condition) {
+		if (!condition.isEmpty()) {
+			return testDa9dac.userNm.like("%" + condition + "%");
 		}
 		return null;
 	}
 
-	private BooleanExpression userIdLike(Map<String, String> params) {
-		if (!params.get("userId").isEmpty()) {
-			return testDa9dac.userId.like("%" + params.get("userId") + "%");
+	private BooleanExpression userIdLike(String condition) {
+		if (!condition.isEmpty()) {
+			return testDa9dac.userId.like("%" + condition + "%");
 		}
 		return null;
 	}
 
-	private BooleanExpression regiUserLike(Map<String, String> params) {
-		if (!params.get("regiUser").isEmpty()) {
-			return testDa9dac.regiUser.like("%" + params.get("regiUser") + "%");
+	private BooleanExpression regiUserLike(String condition) {
+		if (!condition.isEmpty()) {
+			return testDa9dac.regiUser.like("%" + condition + "%");
 		}
 
 		return null;
 	}
 
-	private BooleanExpression updaUserLike(Map<String, String> params) {
-		if (!params.get("updaUser").isEmpty()) {
-			return testDa9dac.updaUser.like("%" + params.get("updaUser") + "%");
+	private BooleanExpression updaUserLike(String condition) {
+		if (!condition.isEmpty()) {
+			return testDa9dac.updaUser.like("%" + condition + "%");
 		}
 		return null;
 	}
 
-	private BooleanExpression regiDtBetween(Map<String, String> params) {
-		if (!params.get("regiDtFrom").isEmpty() && !params.get("regiDtTo").isEmpty()) {
+	private BooleanExpression regiDtBetween(String regiFrom, String regiTo) {
+		if (!regiFrom.isEmpty() && !regiTo.isEmpty()) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			LocalDateTime from = LocalDate.parse(params.get("regiDtFrom"), formatter).atStartOfDay();
-			LocalDateTime to = LocalDate.parse(params.get("regiDtTo"), formatter).atTime(LocalTime.MAX);
+			LocalDateTime from = LocalDate.parse(regiFrom, formatter).atStartOfDay();
+			LocalDateTime to = LocalDate.parse(regiTo, formatter).atTime(LocalTime.MAX);
 
 			return testDa9dac.regiDt.between(from, to);
 		}
 		return null;
 	}
 
-	private BooleanExpression updaDtBetween(Map<String, String> params) {
-		if (!params.get("updaDtFrom").isEmpty() && !params.get("updaDtTo").isEmpty()) {
+	private BooleanExpression updaDtBetween(String updaFrom, String updaTo) {
+		if (!updaFrom.isEmpty() && !updaTo.isEmpty()) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			LocalDateTime from = LocalDate.parse(params.get("updaDtFrom"), formatter).atStartOfDay();
-			LocalDateTime to = LocalDate.parse(params.get("updaDtTo"), formatter).atTime(LocalTime.MAX);
+			LocalDateTime from = LocalDate.parse(updaFrom, formatter).atStartOfDay();
+			LocalDateTime to = LocalDate.parse(updaTo, formatter).atTime(LocalTime.MAX);
 
 			return testDa9dac.updaDt.between(from, to);
 		}
 		return null;
 	}
 
-	private BooleanExpression useYnEqToY() {
-		return testDa9dac.useYn.eq("Y");
+	private BooleanExpression useYnEqToY(String condition) {
+		if (!condition.isEmpty()) return testDa9dac.useYn.eq(condition);
+		return null;
 	}
 
 	private StringTemplate convertRegiDt() {

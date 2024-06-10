@@ -1,11 +1,11 @@
 package com.homework.api.user.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.homework.api.user.dto.DeleteRequest;
 import com.homework.api.user.dto.RegiRequest;
 import com.homework.api.user.dto.GroupByResponse;
-import com.homework.api.user.dto.DataSearchResult;
+import com.homework.api.user.dto.SearchRequest;
+import com.homework.api.user.dto.SearchResult;
 import com.homework.api.user.dto.UpdateRequest;
 import com.homework.api.user.model.TestDa9dac;
 import com.homework.api.user.service.UserService;
@@ -29,9 +30,12 @@ public class UserController {
 		this.userService = userService;
 	}
 
-	@GetMapping("/table")
-	public ResponseEntity<List<TestDa9dac>> table() {
-		return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
+	@PostMapping("/table")
+	public ResponseEntity<SearchResult> table(@RequestBody SearchRequest request) {
+		ResponseEntity<SearchResult> response =
+			new ResponseEntity<>(userService.getUsers(request), HttpStatus.OK);
+
+		return response;
 	}
 
 	@PostMapping("/regiUser")
@@ -47,15 +51,5 @@ public class UserController {
 	@PostMapping("/delete")
 	public void deleteUser(@RequestBody DeleteRequest request) {
 		userService.deleteUser(request);
-	}
-
-	@PostMapping("/search")
-	public ResponseEntity<DataSearchResult> search(@RequestBody Map<String, String> params) {
-		List<TestDa9dac> search = userService.search(params);
-		List<GroupByResponse> groupBy = userService.groupBy(params);
-
-		ResponseEntity<DataSearchResult> response = new ResponseEntity<>(new DataSearchResult(search, groupBy), HttpStatus.OK);
-
-		return response;
 	}
 }

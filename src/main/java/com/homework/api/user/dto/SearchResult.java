@@ -4,15 +4,15 @@ import java.util.List;
 
 import com.homework.api.user.model.TestDa9dac;
 
-public class DataSearchResult {
+public class SearchResult {
 
 	private List<?> searchResponse;
 	private List<GroupByResponse> groupByResponse;
 
-	public DataSearchResult() {
+	public SearchResult() {
 	}
 
-	public DataSearchResult(List<TestDa9dac> searchResponse, List<GroupByResponse> groupByResponse) {
+	public SearchResult(List<TestDa9dac> searchResponse, List<GroupByResponse> groupByResponse) {
 		this.searchResponse = searchResponse;
 		this.groupByResponse = groupByResponse;
 	}
