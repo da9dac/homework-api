@@ -16,6 +16,6 @@ public interface TestDa9dacRepository extends JpaRepository<TestDa9dac, String> 
 
 	@Modifying
 	@Transactional
-	@Query("UPDATE TestDa9dac t SET t.useYn = 'N', t.updaUser = :updaUser WHERE t.userId IN :userIds")
+	@Query("UPDATE TestDa9dac t SET t.useYn = 'N', t.updaDt = CURRENT_TIMESTAMP, t.updaUser = :updaUser WHERE t.userId IN :userIds")
 	void updateUseYnAndUpdaUserByUserIdIn(@Param("userIds") List<String> userIds, String updaUser);
 }

@@ -54,6 +54,7 @@ public class UserService {
 		if (!request.getPw().isEmpty()) user.setPw(request.getPw());
 		if (!request.getUpdaUser().isEmpty()) user.setUpdaUser(request.getUpdaUser());
 		if (!request.getUseYn().isEmpty()) user.setUseYn(request.getUseYn());
+		user.setUpdaDt(LocalDateTime.now());
 
 		testDa9dacRepository.save(user);
 	}

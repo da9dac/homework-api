@@ -23,28 +23,28 @@ public class TestDa9dac {
 	@Column(name = "USER_ID")
 	private String userId;
 
-	@Column(name = "USER_NM", nullable = false)
+	@Column(name = "USER_NM")
 	private String userNm;
 
-	@Column(name = "PW", nullable = false)
+	@Column(name = "PW")
 	private String pw;
 
 	@CreatedDate
 	@Column(name = "REGI_DT", updatable = false)
 	private LocalDateTime regiDt;
 
-	@Column(name = "REGI_USER", nullable = false)
+	@Column(name = "REGI_USER")
 	private String regiUser;
 
 	@LastModifiedDate
-	@Column(name = "UPDA_DT")
+	@Column(name = "UPDA_DT", insertable = false)
 	private LocalDateTime updaDt;
 
 	@Column(name = "UPDA_USER")
 	private String updaUser;
 
 	@ColumnDefault("Y")
-	@Column(name = "USE_YN", nullable = false)
+	@Column(name = "USE_YN")
 	private String useYn = "Y";
 
 	public TestDa9dac() {}
