@@ -16,7 +16,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "TEST_da9dac")
+@Table(name = "TEST_DA9DAC_USER")
 public class TestDa9dac {
 
 	@Id
